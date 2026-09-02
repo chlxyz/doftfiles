@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Toggles between light and dark themes for GTK
+
+GTK3_SETTINGS_FILE="$HOME/.config/gtk-3.0/settings.ini"
+GTK4_SETTINGS_FILE="$HOME/.config/gtk-4.0/settings.ini"
+KEY="gtk-application-prefer-dark-theme"
+
+# Check if GTK3 settings file exists
+if [ ! -f "$GTK3_SETTINGS_FILE" ]; then
+    echo "Error: $GTK3_SETTINGS_FILE not found."
+    exit 1
+fi
+
+# Read the current preference. It is a GTK boolean, so it can legitimately be
+# stored as 1/0 or as true/false: third-party GTK settings tools write the
+# boolean spelling. Accept both, like gtk-theme-switcher.sh already does.
+current=$(grep -E "^$KEY=" "$GTK3_SETTINGS_FILE" | awk -F'=' '{print $2}')
+
+case "$current" in
+    1 | true)
+        # Currently dark -> switch to light
+        gtk3_value=0
+        gtk4_value=false
+        message="Switched to light theme."
+        new_mode="light"
+        wallpaper="$HOME/.config/ml4w/wallpapers/minimal-waves.jpg"
+        gsettings_mode="prefer-light"
+        ;;
+    *)
+        # Currently light, unset or unrecognised -> switch to dark
+        gtk3_value=1
+        gtk4_value=true
+        message="Switched to dark theme."
+        new_mode="dark"
+        wallpaper="$HOME/.config/ml4w/wallpapers/default.jpg"
+        gsettings_mode="prefer-dark"
+        ;;
+esac
+
+# Assign the new value instead of rewriting one specific spelling, so the
+# toggle works regardless of how the current value happens to be written.
+sed -i "s/^$KEY=.*/$KEY=$gtk3_value/" "$GTK3_SETTINGS_FILE"
+if [ -f "$GTK4_SETTINGS_FILE" ]; then
+    sed -i "s/^$KEY=.*/$KEY=$gtk4_value/" "$GTK4_SETTINGS_FILE"
+fi
+
+# ponytail: light/dark toggle — O(1) matugen regen, no new deps
+gsettings set org.gnome.desktop.interface color-scheme "$gsettings_mode" 2>/dev/null || true
+if [ -f "$wallpaper" ]; then
+    matugen image "$wallpaper" --source-color-index 0 -m "$new_mode" >/dev/null 2>&1 || true
+    ln -sf "$wallpaper" "$HOME/.cache/ml4w/hyprland-dotfiles/current_wallpaper" 2>/dev/null || true
+    # update wallpaper via awww if running (no effect if not)
+    awww img "$wallpaper" --transition-type none 2>/dev/null || true
+fi
+# quickshell picks up colors.json via file watcher; force reload if needed
+pkill -SIGUSR1 quickshell 2>/dev/null || true
+
+echo "$message ($new_mode)"

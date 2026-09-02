@@ -1,0 +1,8 @@
+# ponytail: minimal ignore, private repo but keep it clean
+.cache/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+/tmp/
+node_modules/.cache/
