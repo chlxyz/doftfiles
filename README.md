@@ -30,11 +30,11 @@ hyprctl reload
 ## Updating backup (manual — recommended)
 ```bash
 # run when you tweak hypr/waybar:
-rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ /tmp/doftfiles-staging/ && rsync -a ~/.config/Kvantum/ /tmp/doftfiles-staging/.config/Kvantum/ && cp ~/.gitconfig /tmp/doftfiles-staging/.gitconfig 2>/dev/null; pacman -Qqe > /tmp/doftfiles-staging/pkglist.txt; hyprctl version > /tmp/doftfiles-staging/hypr-version.txt; cd /tmp/doftfiles-staging && git add -A && git commit -m "update: $(date -I)" && git push
+rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ ~/doftfiles/ && rsync -a ~/.config/Kvantum/ ~/doftfiles/.config/Kvantum/ && cp ~/.gitconfig ~/doftfiles/.gitconfig 2>/dev/null; pacman -Qqe > ~/doftfiles/pkglist.txt; hyprctl version > ~/doftfiles/hypr-version.txt; cd ~/doftfiles && git add -A && git commit -m "update: $(date -I)" && git push
 ```
 Alias: add to `~/.bashrc`/`~/.zshrc`:
 ```
-alias doftfiles-push='rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ /tmp/doftfiles-staging/ && rsync -a ~/.config/Kvantum/ /tmp/doftfiles-staging/.config/Kvantum/ && cp ~/.gitconfig /tmp/doftfiles-staging/.gitconfig 2>/dev/null; pacman -Qqe > /tmp/doftfiles-staging/pkglist.txt; hyprctl version > /tmp/doftfiles-staging/hypr-version.txt; cd /tmp/doftfiles-staging && git add -A && git commit -m "update: $(date -I)" && git push'
+alias doftfiles-push='rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ ~/doftfiles/ && rsync -a ~/.config/Kvantum/ ~/doftfiles/.config/Kvantum/ && cp ~/.gitconfig ~/doftfiles/.gitconfig 2>/dev/null; pacman -Qqe > ~/doftfiles/pkglist.txt; hyprctl version > ~/doftfiles/hypr-version.txt; cd ~/doftfiles && git add -A && git commit -m "update: $(date -I)" && git push'
 ```
 
 Skipped: auto-watcher/cron (add when you forget 3x).

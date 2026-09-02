@@ -90,11 +90,11 @@ reboot
 ## 6. Future updates (on main machine)
 After tweaking hypr/waybar:
 ```bash
-rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ /tmp/doftfiles-staging/ && rsync -a ~/.config/Kvantum/ /tmp/doftfiles-staging/.config/Kvantum/ && cp ~/.gitconfig /tmp/doftfiles-staging/.gitconfig 2>/dev/null; pacman -Qqe > /tmp/doftfiles-staging/pkglist.txt; pacman -Qqm > /tmp/doftfiles-staging/pkglist-aur.txt; hyprctl version > /tmp/doftfiles-staging/hypr-version.txt; cd /tmp/doftfiles-staging && git add -A && git commit -m "update: $(date -I)" && git push
+rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ ~/doftfiles/ && rsync -a ~/.config/Kvantum/ ~/doftfiles/.config/Kvantum/ && cp ~/.gitconfig ~/doftfiles/.gitconfig 2>/dev/null; pacman -Qqe > ~/doftfiles/pkglist.txt; pacman -Qqm > ~/doftfiles/pkglist-aur.txt; hyprctl version > ~/doftfiles/hypr-version.txt; cd ~/doftfiles && git add -A && git commit -m "update: $(date -I)" && git push
 ```
 Or add alias to `~/.bashrc`:
 ```bash
-alias doftfiles-push='rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ /tmp/doftfiles-staging/ && rsync -a ~/.config/Kvantum/ /tmp/doftfiles-staging/.config/Kvantum/ && cp ~/.gitconfig /tmp/doftfiles-staging/.gitconfig 2>/dev/null; pacman -Qqe > /tmp/doftfiles-staging/pkglist.txt; hyprctl version > /tmp/doftfiles-staging/hypr-version.txt; cd /tmp/doftfiles-staging && git add -A && git commit -m "update: $(date -I)" && git push'
+alias doftfiles-push='rsync -aL ~/.mydotfiles/com.ml4w.dotfiles.stable/ ~/doftfiles/ && rsync -a ~/.config/Kvantum/ ~/doftfiles/.config/Kvantum/ && cp ~/.gitconfig ~/doftfiles/.gitconfig 2>/dev/null; pacman -Qqe > /tmp/doftfiles-staging/pkglist.txt; hyprctl version > /tmp/doftfiles-staging/hypr-version.txt; cd /tmp/doftfiles-staging && git add -A && git commit -m "update: $(date -I)" && git push'
 ```
 
 ## Troubleshooting
