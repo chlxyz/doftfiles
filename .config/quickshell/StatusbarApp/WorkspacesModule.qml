@@ -8,6 +8,8 @@ RowLayout {
     id: wsRoot
     spacing: 6
 
+    readonly property bool isDark: (0.299 * Theme.background.r + 0.587 * Theme.background.g + 0.114 * Theme.background.b) < 0.5
+
     // Minimum number of workspaces to always display, even when empty. The list
     // still grows beyond this to reveal any higher-numbered workspace that
     // exists (e.g. switching to workspace 6 while this is 5 adds a 6th dot).
@@ -90,9 +92,9 @@ RowLayout {
             }
 
             color: ws.isActive
-                ? "#ffffff"
-                : (wsMouse.containsMouse ? "#333333" : "transparent")
-            border.color: "#ffffff"
+                ? (wsRoot.isDark ? "#ffffff" : "#000000")
+                : (wsMouse.containsMouse ? (wsRoot.isDark ? "#333333" : "#d8d8d8") : "transparent")
+            border.color: wsRoot.isDark ? "#ffffff" : "#000000"
             border.width: ws.isActive ? 0 : 1
 
             // Crossfade the fill between active / hover / inactive states so the
@@ -111,7 +113,7 @@ RowLayout {
                 anchors.margins: -3
                 radius: width / 2
                 color: "transparent"
-                border.color: "#ffffff"
+                border.color: wsRoot.isDark ? "#ffffff" : "#000000"
                 border.width: 2
                 opacity: ws.focused ? 1 : 0
                 Behavior on opacity {
@@ -122,7 +124,7 @@ RowLayout {
             Text {
                 anchors.centerIn: parent
                 text: ws.modelData
-                color: ws.isActive ? "#000000" : "#ffffff"
+                color: ws.isActive ? (wsRoot.isDark ? "#000000" : "#ffffff") : (wsRoot.isDark ? "#ffffff" : "#000000")
                 font.family: Theme.fontFamily
                 font.pixelSize: 13
                 font.bold: true

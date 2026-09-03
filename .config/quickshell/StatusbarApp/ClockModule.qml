@@ -27,6 +27,8 @@ Item {
     // block sits centered alongside the other icons.
     transform: Translate { y: clockRoot.expanded ? -2 : 0 }
 
+    readonly property bool isDark: (0.299 * Theme.background.r + 0.587 * Theme.background.g + 0.114 * Theme.background.b) < 0.5
+
     // Highlight ring shown when selected via the keyboard. Wraps tightly around
     // the visible content (the time, plus the date when expanded).
     Rectangle {
@@ -40,7 +42,7 @@ Item {
         anchors.bottomMargin: -4
         radius: 8
         color: "transparent"
-        border.color: "#ffffff"
+        border.color: clockRoot.isDark ? "#ffffff" : "#000000"
         border.width: 1
         opacity: clockRoot.focused ? 1 : 0
         Behavior on opacity {
@@ -75,7 +77,7 @@ Item {
             NumberAnimation { duration: 250; easing.type: Easing.OutQuint }
         }
         text: Qt.formatDateTime(clock.date, clockRoot.timeFormat)
-        color: "#ffffff"
+        color: clockRoot.isDark ? "#ffffff" : "#000000"
         font.family: Theme.fontFamily
         font.pixelSize: 16
         font.bold: true
@@ -87,7 +89,7 @@ Item {
         anchors.top: timeText.bottom
         anchors.topMargin: 1
         text: Qt.formatDateTime(clock.date, clockRoot.dateFormat)
-        color: "#ffffff"
+        color: clockRoot.isDark ? "#ffffff" : "#000000"
         font.family: Theme.fontFamily
         font.pixelSize: 11
 

@@ -17,14 +17,15 @@ Rectangle {
 
     // Highlighted when hovered with the mouse or selected via the keyboard.
     readonly property bool active: mouseArea.containsMouse || btn.focused
+    readonly property bool isDark: (0.299 * Theme.background.r + 0.587 * Theme.background.g + 0.114 * Theme.background.b) < 0.5
 
     implicitWidth: 30
     implicitHeight: 30
     radius: 15
 
     // Every button gets the same accent-filled circle on hover/selection.
-    // ponytail: black bar — white active, black icon
-    color: btn.active ? "#ffffff" : "transparent"
+    // ponytail: black bar — white active, black icon; light glass — black active, white icon
+    color: btn.active ? (btn.isDark ? "#ffffff" : "#000000") : "transparent"
 
     // Fade the accent circle in on hover/selection and out again on leave.
     Behavior on color {
@@ -42,7 +43,7 @@ Rectangle {
         layer.enabled: btn.colorize
         layer.effect: MultiEffect {
             colorization: 1.0
-            colorizationColor: btn.active ? "#000000" : "#ffffff"
+            colorizationColor: btn.active ? (btn.isDark ? "#000000" : "#ffffff") : (btn.isDark ? "#ffffff" : "#000000")
 
             // Recolor the icon in step with the circle fade.
             Behavior on colorizationColor {

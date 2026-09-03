@@ -59,10 +59,12 @@ network-manager-applet
 networkmanager
 noto-fonts-emoji
 npm
+ntfs-3g
 nvidia-open
 nwg-displays
 nwg-look
 opencode
+os-prober
 otf-font-awesome
 pacman-contrib
 pavucontrol

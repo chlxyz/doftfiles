@@ -213,6 +213,9 @@ PanelWindow {
     // Constant vertical space reserved for the bar (windows tile below this).
     property int reservedHeight: settings.bar.reservedHeight
 
+    // ponytail: light/dark → white glass vs black; same lum check as dock
+    readonly property bool isDark: (0.299 * Theme.background.r + 0.587 * Theme.background.g + 0.114 * Theme.background.b) < 0.5
+
     // Whether the bar is shown. The "enabled" flag in statusbar.json is the
     // single source of truth; it is toggled from the SidebarApp switch and via
     // "qs ipc call statusbar toggle", persisted back to the file, and survives
@@ -665,20 +668,22 @@ PanelWindow {
             Keys.onEscapePressed: root.barExpanded = false
         }
 
-        // ponytail: solid black, no shadow — removed RectangularShadow
+        // ponytail: flat #000 dark / translucent glassy white light (no shadow)
         Rectangle {
             id: pillBg
             anchors.fill: parent
             radius: root.settings.pill.radius
-            color: "#000000"
+            color: root.isDark ? "#000000" : Qt.rgba(1, 1, 1, 0.45)
+            border.width: root.isDark ? 0 : 1
+            border.color: Qt.rgba(1, 1, 1, 0.28)
             opacity: 1
 
-            // Actual background fill (inner), inset by the border thickness
+            // inner fill for consistent radius
             Rectangle {
                 anchors.fill: parent
-                anchors.margins: root.settings.border.width
+                anchors.margins: root.isDark ? 0 : 1
                 radius: parent.radius - anchors.margins
-                color: "#000000"
+                color: parent.color
             }
         }
 

@@ -3,7 +3,6 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Effects
 import qs.CustomTheme
 import qs.DockApp
 
@@ -231,9 +230,12 @@ PanelWindow {
         right: true
     }
 
+    // Dark iff wallpaper-derived background is dark (matugen dark vs light)
+    readonly property bool isDark: (0.299 * Theme.background.r + 0.587 * Theme.background.g + 0.114 * Theme.background.b) < 0.5
+
     // Height of the visible pill, and of the window around it. The window is
-    // taller than the pill to leave room for the drop shadow and for the pill to
-    // slide down out of view when autohiding.
+    // taller than the pill to leave room for the pill to slide down out of view
+    // when autohiding (no shadow anymore).
     readonly property int dockHeight: settings.dock.iconSize
         + 2 * settings.pill.padding + 10
     // Room above the pill for the context menu, which is drawn inside this
@@ -341,44 +343,23 @@ PanelWindow {
             }
         }
 
-        RectangularShadow {
-            anchors.fill: pillBg
-            radius: pillBg.radius
-            blur: 15
-            color: Qt.rgba(Theme.shadow.r, Theme.shadow.g, Theme.shadow.b, 0.4)
-        }
-
-        // Gradient BORDER layer (outer)
+        // ponytail: flat, no shadow — #000 dark, translucent glassy white light (more translucent per request)
         Rectangle {
             id: pillBg
             anchors.fill: parent
             radius: root.settings.pill.radius
-            opacity: root.settings.opacity.normal
+            color: root.isDark ? "#000000" : Qt.rgba(1, 1, 1, 0.45)
+            // subtle border only in light mode so flat black stays pure
+            border.width: root.isDark ? 0 : 1
+            border.color: Qt.rgba(1, 1, 1, 0.28)
+            opacity: 1
 
-            // Border colors come from the settings file; empty strings fall back
-            // to the dynamic wallpaper theme.
-            gradient: Gradient {
-                orientation: Gradient.Vertical
-                GradientStop {
-                    position: 0.0
-                    color: root.settings.border.colorTop !== ""
-                        ? root.settings.border.colorTop
-                        : Theme.primary
-                }
-                GradientStop {
-                    position: 1.0
-                    color: root.settings.border.colorBottom !== ""
-                        ? root.settings.border.colorBottom
-                        : Theme.on_primary
-                }
-            }
-
-            // Actual background fill (inner), inset by the border thickness
+            // inner fill kept for consistent radius with border; flat fill
             Rectangle {
                 anchors.fill: parent
-                anchors.margins: root.settings.border.width
+                anchors.margins: root.isDark ? 0 : 1
                 radius: parent.radius - anchors.margins
-                color: Theme.background
+                color: parent.color
             }
         }
 
